@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   compress: true,
   images: {
     domains: ['images.yourdomain.in', 'lh3.googleusercontent.com'],
