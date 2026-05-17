@@ -10,8 +10,7 @@ help:
 	@echo "  make restart     Restart all services"
 	@echo "  make build       Rebuild backend + frontend images"
 	@echo "  make migrate     Run Alembic DB migrations"
-	@echo "  make seed        Seed subscription plans into DB"
-	@echo "  make setup       Full first-time setup (build + migrate + seed + start)"
+	@echo "  make setup       Full first-time setup (build + migrate + start)"
 	@echo "  make logs        Tail logs from all services"
 	@echo "  make logs-api    Tail backend API logs only"
 	@echo "  make logs-web    Tail frontend logs only"
@@ -66,13 +65,11 @@ setup:
 	@echo "Starting databases..."
 	docker compose up -d postgres redis meilisearch
 	@echo "Waiting for PostgreSQL to be ready..."
-	@sleep 8
+	@sleep 15
 	@echo "Building images..."
 	docker compose build backend frontend
-	@echo "Running migrations..."
+	@echo "Running migrations (includes plan seed)..."
 	docker compose run --rm backend alembic upgrade head
-	@echo "Seeding plans..."
-	docker compose run --rm backend python seed_plans.py
 	@echo "Starting all services..."
 	docker compose up -d
 	@echo ""
